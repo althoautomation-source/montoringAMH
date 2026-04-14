@@ -15,11 +15,15 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
             max-width: 1600px;
             margin: 0 auto;
+            flex: 1;
         }
 
         .header {
@@ -491,6 +495,30 @@
         .item-tag button.edit {
             color: #ffc107;
         }
+
+        /* FOOTER STYLES */
+        .footer {
+            background: linear-gradient(135deg, #1e5c3c, #2a7a4a);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-copyright a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        .footer-copyright a:hover {
+            text-decoration: underline;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -549,7 +577,7 @@
         </div>
     </div>
 
-    <!-- MODAL OEE (large modal) -->
+    <!-- MODAL OEE -->
     <div id="modalOEE" class="modal">
         <div class="modal-content" style="max-width: 1400px;">
             <div class="modal-header">
@@ -877,6 +905,13 @@
         </div>
     </div>
 </div>
+
+<!-- ============ FOOTER SEDERHANA ============ -->
+<footer class="footer">
+    <div class="footer-copyright">
+        © 2025 PT ALAM MUSTIKA HIJAU. All rights reserved. | Developed with 💚 for better manufacturing efficiency
+    </div>
+</footer>
 
 <script>
 // ============ SUPABASE CONFIGURATION ============
