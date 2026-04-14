@@ -151,6 +151,26 @@
             background: #6c757d;
         }
 
+        .btn-small {
+            background: #2a7a4a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .btn-small.delete {
+            background: #dc3545;
+        }
+
+        .btn-small.edit {
+            background: #ffc107;
+            color: #333;
+        }
+
         .scorecard-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -252,7 +272,7 @@
             background: white;
             border-radius: 20px;
             width: 90%;
-            max-width: 1400px;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
             padding: 24px;
@@ -409,6 +429,68 @@
             color: #adb5bd;
             margin-top: 8px;
         }
+
+        .management-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .management-header h3 {
+            color: #1e5c3c;
+            font-size: 18px;
+        }
+
+        .add-btn {
+            background: #2a7a4a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .item-tag {
+            background: #e9ecef;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .item-tag span {
+            font-size: 14px;
+        }
+
+        .item-tag button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #dc3545;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .item-tag button.edit {
+            color: #ffc107;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -467,9 +549,9 @@
         </div>
     </div>
 
-    <!-- MODAL OEE -->
+    <!-- MODAL OEE (large modal) -->
     <div id="modalOEE" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 1400px;">
             <div class="modal-header">
                 <h2>🏭 Dashboard OEE - PT ALAM MUSTIKA HIJAU</h2>
                 <button class="close-modal" onclick="window.closeModal('modalOEE')">&times;</button>
@@ -488,16 +570,12 @@
                         <label>🏭 Line</label>
                         <select id="oeeFilterLine" onchange="window.updateOEECharts()">
                             <option value="">Semua Line</option>
-                            <option value="Line 1">Line 1</option>
-                            <option value="Line 2">Line 2</option>
                         </select>
                     </div>
                     <div class="filter-group">
                         <label>📦 Produk</label>
                         <select id="oeeFilterProduk" onchange="window.updateOEECharts()">
                             <option value="">Semua Produk</option>
-                            <option value="Kaldu Sapi">Kaldu Sapi</option>
-                            <option value="Kaldu Ayam">Kaldu Ayam</option>
                         </select>
                     </div>
                     <button class="btn-filter reset" onclick="window.resetOEEFilter()">🔄 Reset</button>
@@ -545,7 +623,7 @@
 
     <!-- MODAL LISTRIK -->
     <div id="modalListrik" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 1400px;">
             <div class="modal-header">
                 <h2>⚡ Dashboard Pemakaian Listrik</h2>
                 <button class="close-modal" onclick="window.closeModal('modalListrik')">&times;</button>
@@ -601,7 +679,7 @@
 
     <!-- MODAL PAM -->
     <div id="modalPam" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 1400px;">
             <div class="modal-header">
                 <h2>💧 Dashboard Pemakaian PAM</h2>
                 <button class="close-modal" onclick="window.closeModal('modalPam')">&times;</button>
@@ -648,6 +726,38 @@
         </div>
     </div>
 
+    <!-- MODAL ADD/EDIT LINE -->
+    <div id="modalLine" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="lineModalTitle">Tambah Line Baru</h2>
+                <button class="close-modal" onclick="window.closeModal('modalLine')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Nama Line</label>
+                <input type="text" id="lineName" placeholder="Contoh: Line 3">
+            </div>
+            <input type="hidden" id="editLineId">
+            <button class="btn-submit" onclick="window.saveLine()">💾 Simpan</button>
+        </div>
+    </div>
+
+    <!-- MODAL ADD/EDIT PRODUK -->
+    <div id="modalProduk" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="produkModalTitle">Tambah Produk Baru</h2>
+                <button class="close-modal" onclick="window.closeModal('modalProduk')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Nama Produk</label>
+                <input type="text" id="produkName" placeholder="Contoh: Kaldu Sapi">
+            </div>
+            <input type="hidden" id="editProdukId">
+            <button class="btn-submit" onclick="window.saveProduk()">💾 Simpan</button>
+        </div>
+    </div>
+
     <!-- TAB INPUT -->
     <div id="tab-input" class="tab-content">
         <div class="input-subnav">
@@ -661,8 +771,8 @@
                 <div class="card-title">📝 Input Data Produksi Harian</div>
                 <div class="form-grid">
                     <div class="form-group"><label>Tanggal</label><input type="date" id="tgl"></div>
-                    <div class="form-group"><label>Line</label><select id="line"><option value="">Pilih Line</option><option value="Line 1">Line 1</option><option value="Line 2">Line 2</option></select></div>
-                    <div class="form-group"><label>Produk</label><select id="produk"><option value="">Pilih Produk</option><option value="Kaldu Sapi">Kaldu Sapi</option><option value="Kaldu Ayam">Kaldu Ayam</option></select></div>
+                    <div class="form-group"><label>Line</label><select id="line"></select></div>
+                    <div class="form-group"><label>Produk</label><select id="produk"></select></div>
                     <div class="form-group"><label>Jam Kerja (menit)</label><input type="number" id="jamKerja"></div>
                     <div class="form-group"><label>Target (dus)</label><input type="number" id="target"></div>
                     <div class="form-group"><label>Hasil FG (dus)</label><input type="number" id="hasilFg"></div>
@@ -736,6 +846,23 @@
             </div>
             <button class="btn-submit" onclick="window.simpanMasterHarga()">💾 Simpan Master Harga</button>
         </div>
+
+        <div class="management-section">
+            <div class="management-header">
+                <h3>🏭 Manajemen Line Produksi</h3>
+                <button class="add-btn" onclick="window.showAddLineModal()">+ Tambah Line</button>
+            </div>
+            <div id="lineList" class="item-list"></div>
+        </div>
+
+        <div class="management-section">
+            <div class="management-header">
+                <h3>📦 Manajemen Produk</h3>
+                <button class="add-btn" onclick="window.showAddProdukModal()">+ Tambah Produk</button>
+            </div>
+            <div id="produkList" class="item-list"></div>
+        </div>
+
         <div class="card">
             <div class="card-title">📋 Master Data Saat Ini</div>
             <div id="masterDataInfo"></div>
@@ -753,9 +880,8 @@
 
 <script>
 // ============ SUPABASE CONFIGURATION ============
-// GANTI DENGAN CREDENTIAL SUPABASE ANDA
-const SUPABASE_URL = 'https://pqobmajelszcvltzqhpz.supabase.co';  // GANTI!
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxb2JtYWplbHN6Y3ZsdHpxaHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwOTk4MjEsImV4cCI6MjA5MTY3NTgyMX0.5U8SsawbJrLOx_u_7OfO4Hi7lLHax2ipB88NSmQPdkg';               // GANTI!
+const SUPABASE_URL = 'https://pqobmajelszcvltzqhpz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxb2JtYWplbHN6Y3ZsdHpxaHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwOTk4MjEsImV4cCI6MjA5MTY3NTgyMX0.5U8SsawbJrLOx_u_7OfO4Hi7lLHax2ipB88NSmQPdkg';
 
 window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -764,11 +890,8 @@ let oeeMonthlyChart = null;
 let downtimeDailyChart = null;
 let listrikMonthlyTrendChart = null;
 let listrikBarChart = null;
-let listrikMesinTrendChart = null;
-let listrikUtilityTrendChart = null;
 let pamMonthlyTrendChart = null;
 
-// Register chart plugin
 Chart.register(ChartDataLabels);
 Chart.defaults.set('plugins.datalabels', {
     color: '#1e5c3c',
@@ -794,6 +917,261 @@ function setDefaultFilter() {
     if (endInput) endInput.value = range.end;
 }
 
+// ============ MASTER DATA MANAGEMENT ============
+async function loadLines() {
+    const { data, error } = await window.supabaseClient
+        .from('master_line')
+        .select('*')
+        .order('name');
+    
+    if (error) {
+        console.error('Error loading lines:', error);
+        return [];
+    }
+    return data || [];
+}
+
+async function loadProduk() {
+    const { data, error } = await window.supabaseClient
+        .from('master_produk')
+        .select('*')
+        .order('name');
+    
+    if (error) {
+        console.error('Error loading produk:', error);
+        return [];
+    }
+    return data || [];
+}
+
+async function refreshLineSelects() {
+    const lines = await loadLines();
+    const lineSelects = ['line', 'oeeFilterLine'];
+    
+    for (const selectId of lineSelects) {
+        const select = document.getElementById(selectId);
+        if (select) {
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">Pilih Line</option>';
+            lines.forEach(line => {
+                const option = document.createElement('option');
+                option.value = line.name;
+                option.textContent = line.name;
+                if (currentValue === line.name) option.selected = true;
+                select.appendChild(option);
+            });
+        }
+    }
+}
+
+async function refreshProdukSelects() {
+    const produkList = await loadProduk();
+    const produkSelects = ['produk', 'oeeFilterProduk'];
+    
+    for (const selectId of produkSelects) {
+        const select = document.getElementById(selectId);
+        if (select) {
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">Pilih Produk</option>';
+            produkList.forEach(produk => {
+                const option = document.createElement('option');
+                option.value = produk.name;
+                option.textContent = produk.name;
+                if (currentValue === produk.name) option.selected = true;
+                select.appendChild(option);
+            });
+        }
+    }
+}
+
+async function displayLineList() {
+    const lines = await loadLines();
+    const container = document.getElementById('lineList');
+    if (!container) return;
+    
+    if (lines.length === 0) {
+        container.innerHTML = '<p style="color: #6c757d;">Belum ada line. Klik "Tambah Line" untuk menambahkan.</p>';
+        return;
+    }
+    
+    container.innerHTML = lines.map(line => `
+        <div class="item-tag">
+            <span>🏭 ${escapeHtml(line.name)}</span>
+            <button class="edit" onclick="window.editLine(${line.id}, '${escapeHtml(line.name)}')">✏️</button>
+            <button onclick="window.deleteLine(${line.id})">✖</button>
+        </div>
+    `).join('');
+}
+
+async function displayProdukList() {
+    const produkList = await loadProduk();
+    const container = document.getElementById('produkList');
+    if (!container) return;
+    
+    if (produkList.length === 0) {
+        container.innerHTML = '<p style="color: #6c757d;">Belum ada produk. Klik "Tambah Produk" untuk menambahkan.</p>';
+        return;
+    }
+    
+    container.innerHTML = produkList.map(produk => `
+        <div class="item-tag">
+            <span>📦 ${escapeHtml(produk.name)}</span>
+            <button class="edit" onclick="window.editProduk(${produk.id}, '${escapeHtml(produk.name)}')">✏️</button>
+            <button onclick="window.deleteProduk(${produk.id})">✖</button>
+        </div>
+    `).join('');
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+window.showAddLineModal = function() {
+    document.getElementById('lineModalTitle').textContent = 'Tambah Line Baru';
+    document.getElementById('lineName').value = '';
+    document.getElementById('editLineId').value = '';
+    document.getElementById('modalLine').classList.add('active');
+}
+
+window.editLine = function(id, name) {
+    document.getElementById('lineModalTitle').textContent = 'Edit Line';
+    document.getElementById('lineName').value = name;
+    document.getElementById('editLineId').value = id;
+    document.getElementById('modalLine').classList.add('active');
+}
+
+window.saveLine = async function() {
+    const name = document.getElementById('lineName').value.trim();
+    const editId = document.getElementById('editLineId').value;
+    
+    if (!name) {
+        alert('Nama line tidak boleh kosong!');
+        return;
+    }
+    
+    if (editId) {
+        const { error } = await window.supabaseClient
+            .from('master_line')
+            .update({ name: name })
+            .eq('id', parseInt(editId));
+        
+        if (error) {
+            alert('Gagal update: ' + error.message);
+        } else {
+            alert('Line berhasil diupdate!');
+            window.closeModal('modalLine');
+            await displayLineList();
+            await refreshLineSelects();
+        }
+    } else {
+        const { error } = await window.supabaseClient
+            .from('master_line')
+            .insert({ name: name });
+        
+        if (error) {
+            alert('Gagal simpan: ' + error.message);
+        } else {
+            alert('Line berhasil ditambahkan!');
+            window.closeModal('modalLine');
+            await displayLineList();
+            await refreshLineSelects();
+        }
+    }
+}
+
+window.deleteLine = async function(id) {
+    if (!confirm('Yakin ingin menghapus line ini? Data OEE yang terkait akan tetap tersimpan.')) return;
+    
+    const { error } = await window.supabaseClient
+        .from('master_line')
+        .delete()
+        .eq('id', id);
+    
+    if (error) {
+        alert('Gagal hapus: ' + error.message);
+    } else {
+        alert('Line berhasil dihapus!');
+        await displayLineList();
+        await refreshLineSelects();
+    }
+}
+
+window.showAddProdukModal = function() {
+    document.getElementById('produkModalTitle').textContent = 'Tambah Produk Baru';
+    document.getElementById('produkName').value = '';
+    document.getElementById('editProdukId').value = '';
+    document.getElementById('modalProduk').classList.add('active');
+}
+
+window.editProduk = function(id, name) {
+    document.getElementById('produkModalTitle').textContent = 'Edit Produk';
+    document.getElementById('produkName').value = name;
+    document.getElementById('editProdukId').value = id;
+    document.getElementById('modalProduk').classList.add('active');
+}
+
+window.saveProduk = async function() {
+    const name = document.getElementById('produkName').value.trim();
+    const editId = document.getElementById('editProdukId').value;
+    
+    if (!name) {
+        alert('Nama produk tidak boleh kosong!');
+        return;
+    }
+    
+    if (editId) {
+        const { error } = await window.supabaseClient
+            .from('master_produk')
+            .update({ name: name })
+            .eq('id', parseInt(editId));
+        
+        if (error) {
+            alert('Gagal update: ' + error.message);
+        } else {
+            alert('Produk berhasil diupdate!');
+            window.closeModal('modalProduk');
+            await displayProdukList();
+            await refreshProdukSelects();
+        }
+    } else {
+        const { error } = await window.supabaseClient
+            .from('master_produk')
+            .insert({ name: name });
+        
+        if (error) {
+            alert('Gagal simpan: ' + error.message);
+        } else {
+            alert('Produk berhasil ditambahkan!');
+            window.closeModal('modalProduk');
+            await displayProdukList();
+            await refreshProdukSelects();
+        }
+    }
+}
+
+window.deleteProduk = async function(id) {
+    if (!confirm('Yakin ingin menghapus produk ini? Data OEE yang terkait akan tetap tersimpan.')) return;
+    
+    const { error } = await window.supabaseClient
+        .from('master_produk')
+        .delete()
+        .eq('id', id);
+    
+    if (error) {
+        alert('Gagal hapus: ' + error.message);
+    } else {
+        alert('Produk berhasil dihapus!');
+        await displayProdukList();
+        await refreshProdukSelects();
+    }
+}
+
 // ============ DASHBOARD FUNCTIONS ============
 window.applyFilter = async function() {
     await updateDashboard();
@@ -811,7 +1189,6 @@ async function updateDashboard() {
     const endDate = document.getElementById('filterEndDate').value;
     if (!startDate || !endDate) return;
     
-    // Get OEE data
     const { data: oeeData } = await window.supabaseClient
         .from('oee_data')
         .select('oee')
@@ -825,7 +1202,6 @@ async function updateDashboard() {
     const scoreOEE = document.getElementById('scoreOEE');
     if (scoreOEE) scoreOEE.innerHTML = avgOEE.toFixed(2) + '%';
     
-    // Get listrik data
     const { data: listrikData } = await window.supabaseClient
         .from('listrik_data')
         .select('*')
@@ -851,7 +1227,6 @@ async function updateDashboard() {
     if (scoreListrikKwh) scoreListrikKwh.innerHTML = totalKwh.toLocaleString() + ' kWh';
     if (scoreListrikBiaya) scoreListrikBiaya.innerHTML = 'Rp ' + biayaListrik.toLocaleString();
     
-    // Get PAM data
     const { data: pamData } = await window.supabaseClient
         .from('pam_data')
         .select('*')
@@ -880,10 +1255,6 @@ window.showDetailOEE = function() {
     const endInput = document.getElementById('oeeFilterEnd');
     if (startInput) startInput.value = range.start;
     if (endInput) endInput.value = range.end;
-    const lineSelect = document.getElementById('oeeFilterLine');
-    const produkSelect = document.getElementById('oeeFilterProduk');
-    if (lineSelect) lineSelect.value = '';
-    if (produkSelect) produkSelect.value = '';
     updateOEECharts();
     if (modal) modal.classList.add('active');
 }
@@ -1229,11 +1600,12 @@ function hitungOEE(data) {
 window.simpanOEE = async function() {
     let tanggal = document.getElementById('tgl').value;
     let line = document.getElementById('line').value;
+    let produk = document.getElementById('produk').value;
+    
     if (!tanggal || !line) { alert('Isi tanggal dan line!'); return; }
     
     let rawData = { 
-        tanggal, line, 
-        produk: document.getElementById('produk').value, 
+        tanggal, line, produk,
         jam_kerja: parseFloat(document.getElementById('jamKerja').value) || 0, 
         target: parseFloat(document.getElementById('target').value) || 0, 
         hasil_fg: parseFloat(document.getElementById('hasilFg').value) || 0, 
@@ -1287,10 +1659,10 @@ async function loadOEEList() {
             let bgColor = d.oee >= 85 ? '#d4edda' : (d.oee >= 70 ? '#fff3cd' : '#f8d7da');
             html += `<tr>
                 <td>${d.tanggal}</td>
-                <td>${d.line}</td>
-                <td>${d.produk}</td>
-                <td>${d.target}</td>
-                <td>${d.hasil_fg}</td>
+                <td>${d.line || ''}</td>
+                <td>${d.produk || ''}</td>
+                <td>${d.target || 0}</td>
+                <td>${d.hasil_fg || 0}</td>
                 <td style="background:${bgColor};font-weight:bold;">${d.oee}%</td>
                 <td><button class="btn-delete" onclick="window.hapusOEE(${d.id})">Hapus</button></td>
             </tr>`;
@@ -1559,7 +1931,11 @@ window.switchTab = async function(tab) {
     if (tab === 'dashboard') await updateDashboard();
     if (tab === 'input') { await loadOEEList(); await loadListrikList(); await loadPamList(); }
     if (tab === 'audit') await loadAuditList();
-    if (tab === 'management') await loadMasterDataInfo();
+    if (tab === 'management') {
+        await loadMasterDataInfo();
+        await displayLineList();
+        await displayProdukList();
+    }
 }
 
 window.switchInputPanel = function(panel) {
@@ -1595,6 +1971,24 @@ async function initData() {
         });
     }
     
+    // Check if default line exists
+    const { data: lines } = await window.supabaseClient.from('master_line').select('*');
+    if (!lines || lines.length === 0) {
+        await window.supabaseClient.from('master_line').insert([
+            { name: 'Line 1' },
+            { name: 'Line 2' }
+        ]);
+    }
+    
+    // Check if default produk exists
+    const { data: produkList } = await window.supabaseClient.from('master_produk').select('*');
+    if (!produkList || produkList.length === 0) {
+        await window.supabaseClient.from('master_produk').insert([
+            { name: 'Kaldu Sapi' },
+            { name: 'Kaldu Ayam' }
+        ]);
+    }
+    
     // Check if dummy data needed for OEE
     const { count: oeeCount } = await window.supabaseClient
         .from('oee_data')
@@ -1623,11 +2017,18 @@ async function initData() {
     }
     
     setDefaultFilter();
+    await refreshLineSelects();
+    await refreshProdukSelects();
     await updateDashboard();
     await loadMasterDataInfo();
 }
 
 async function generateDummyOEE() {
+    const lines = await loadLines();
+    const produkList = await loadProduk();
+    
+    if (lines.length === 0 || produkList.length === 0) return;
+    
     const dummyOEE = [];
     const startDate = new Date(2025, 0, 1);
     for (let i = 0; i < 60; i++) {
@@ -1639,8 +2040,8 @@ async function generateDummyOEE() {
         const qualVal = 90 + Math.random() * 9;
         dummyOEE.push({
             tanggal: dateStr,
-            line: Math.random() > 0.5 ? 'Line 1' : 'Line 2',
-            produk: Math.random() > 0.5 ? 'Kaldu Sapi' : 'Kaldu Ayam',
+            line: lines[Math.floor(Math.random() * lines.length)].name,
+            produk: produkList[Math.floor(Math.random() * produkList.length)].name,
             jam_kerja: 960,
             target: 500 + Math.floor(Math.random() * 200),
             hasil_fg: 450 + Math.floor(Math.random() * 250),
